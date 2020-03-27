@@ -85,7 +85,10 @@ describe('App', () => {
   });
 
   describe('DELETE /bookmarks/:id', () => {
-    it('deletes a bookmark when provided a valid id', () => {});
+    it('deletes a bookmark when provided a valid id', () => {
+      const bookmarkId = '8sdfbvbs65sd';
+      return supertest(app).delete(`/bookmarks/${bookmarkId}`).expect(204);
+    });
 
     it('sends back a 404 error when bookmark with id cannot be found', () => {
       const invalidId = 'INVALID-ID';
