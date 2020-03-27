@@ -23,7 +23,7 @@ describe('App', () => {
 
   describe('GET /bookmarks/:id', () => {
     it('should return a specific bookmark with id', () => {
-      const bookmarkId = '';
+      const bookmarkId = '8sdfbvbs65sd';
       return supertest(app)
         .get(`/bookmarks/${bookmarkId}`)
         .expect(200)
@@ -40,7 +40,7 @@ describe('App', () => {
         });
     });
     it('should return an error if id is invalid', () => {
-      return supertest(app).get('/bookmarks/INVALID').expect(404, 'Not Found');
+      return supertest(app).get('/bookmarks/INVALID').expect(404);
     });
   });
 
