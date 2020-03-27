@@ -38,15 +38,31 @@ bookmarksRouter.route('/')
 
     })
 
+//Note express finds the first matching route
 bookmarksRouter.route('/:id')
 
     .get((req, res) => {
+        console.log(req.params)
         const bookmark = bookmarksData.find(bookmark => bookmark.id === req.params.id)
         //since bookmarks is not found it is undefined which is a falsy value
         if (!bookmark) {
-            return res.status(404).send('NOT FOUND')
+            return res.status(404).send('404 NOT FOUND')
         }
         res.json(bookmark)
+    })
+    .delete((req, res) => {
+        const { id } = req.params
+        const bookIndex = bookmarksData.findIndex(bookmarkId => bookmarkId.id === id)
+
+        if (bookIndex === -1) {
+            return res
+                .status(404)
+                .send('Id not found')
+        }
+
+        bookmarksData.splice(bookIndex, 1)
+        res.status(204).end()
+
     })
 
 
