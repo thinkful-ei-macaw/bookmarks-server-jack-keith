@@ -14,7 +14,7 @@ bookmarksRouter
   .post(bodyParser, (req, res) => {
     const { title, url, desc = '', rating = 1 } = req.body;
     if (!title) {
-      logger.error('TItle is required');
+      logger.error('Title is required');
       return res.status(400).send('Title is required');
     }
     if (!url) {
