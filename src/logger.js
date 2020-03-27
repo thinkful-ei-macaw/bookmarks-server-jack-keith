@@ -14,3 +14,5 @@ if (NODE_ENV !== 'production') {
     })
   );
 }
+
+module.exports = logger;

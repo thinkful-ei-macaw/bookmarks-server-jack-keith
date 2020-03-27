@@ -1,0 +1,9 @@
+{"message":"Unauthorized request to path: /bookmarks","level":"error"}
+{"message":"Bookmark with id INVALID was not found","level":"error"}
+{"message":"Bookmark with id 07b6d67b-a638-47ee-9bc4-583ae00366f9 created","level":"info"}
+{"message":"TItle is required","level":"error"}
+{"message":"Url is required","level":"error"}
+{"message":"Rating is not between 1 and 5","level":"error"}
+{"message":"Url length is wrong","level":"error"}
+{"message":"Bookmark with id 8sdfbvbs65sd deleted","level":"info"}
+{"message":"Bookmark with id INVALID-ID not found","level":"error"}

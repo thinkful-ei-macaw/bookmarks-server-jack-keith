@@ -5,6 +5,7 @@ describe('App', () => {
     it('should return a list of bookmarks', () => {
       return supertest(app)
         .get('/bookmarks')
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
         .expect(200)
         .expect('Content-Type', /json/)
         .then(res => {
@@ -26,6 +27,7 @@ describe('App', () => {
       const bookmarkId = '8sdfbvbs65sd';
       return supertest(app)
         .get(`/bookmarks/${bookmarkId}`)
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
         .expect(200)
         .expect('Content-Type', /json/)
         .then(res => {
@@ -40,7 +42,10 @@ describe('App', () => {
         });
     });
     it('should return an error if id is invalid', () => {
-      return supertest(app).get('/bookmarks/INVALID').expect(404);
+      return supertest(app)
+        .get('/bookmarks/INVALID')
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
+        .expect(404);
     });
   });
 
@@ -54,7 +59,11 @@ describe('App', () => {
     };
 
     it('should create a new bookmark when all params valid', () => {
-      return supertest(app).post('/bookmarks').send(validBookmark).expect(201);
+      return supertest(app)
+        .post('/bookmarks')
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
+        .send(validBookmark)
+        .expect(201);
     });
 
     ['title', 'url'].forEach(key => {
@@ -62,6 +71,7 @@ describe('App', () => {
         const invalidBookmark = { ...validBookmark, [key]: '' };
         return supertest(app)
           .post('/bookmarks')
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
           .send(invalidBookmark)
           .expect(400);
       });
@@ -71,6 +81,7 @@ describe('App', () => {
       const invalidBookmark = { ...validBookmark, rating: 500 };
       return supertest(app)
         .post('/bookmarks')
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
         .send(invalidBookmark)
         .expect(400);
     });
@@ -79,6 +90,7 @@ describe('App', () => {
       const invalidBookmark = { ...validBookmark, url: 'http' };
       return supertest(app)
         .post('/bookmarks')
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
         .send(invalidBookmark)
         .expect(400);
     });
@@ -87,12 +99,18 @@ describe('App', () => {
   describe('DELETE /bookmarks/:id', () => {
     it('deletes a bookmark when provided a valid id', () => {
       const bookmarkId = '8sdfbvbs65sd';
-      return supertest(app).delete(`/bookmarks/${bookmarkId}`).expect(204);
+      return supertest(app)
+        .delete(`/bookmarks/${bookmarkId}`)
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
+        .expect(204);
     });
 
     it('sends back a 404 error when bookmark with id cannot be found', () => {
       const invalidId = 'INVALID-ID';
-      return supertest(app).delete(`/bookmarks/${invalidId}`).expect(404);
+      return supertest(app)
+        .delete(`/bookmarks/${invalidId}`)
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
+        .expect(404);
     });
   });
 });
