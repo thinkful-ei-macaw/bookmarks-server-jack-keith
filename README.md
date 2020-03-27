@@ -4,7 +4,7 @@ A sample server for the booksmarks app.
 
 ## Set up
 
-\*\*Note that you will need to provide your own environment variable for the API Keyin a .env file. Use the variable name API_KEY='your-key-here'.
+\*\*Note that you will need to provide your own environment variable for the API Key in a .env file. Use the variable name API_KEY='your-key-here'.
 
 1. Clone this repository to your local machine
 
