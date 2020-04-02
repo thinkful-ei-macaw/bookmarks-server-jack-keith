@@ -1,6 +1,5 @@
 const express = require('express');
 const xss = require('xss');
-const bookmarksData = require('../store/store');
 const logger = require('../logger');
 const BookmarksService = require('../bookmarks-service');
 
