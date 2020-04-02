@@ -106,3 +106,31 @@
 {"message":"Url is required","level":"error"}
 {"message":"Rating is not between 1 and 5","level":"error"}
 {"message":"Url length is wrong","level":"error"}
+{"message":"Bookmark with id of 1 created","level":"info"}
+{"message":"Title is required","level":"error"}
+{"message":"Url is required","level":"error"}
+{"message":"Rating is not between 1 and 5","level":"error"}
+{"message":"Url length is wrong","level":"error"}
+{"message":"Unauthorized request to path: /bookmarks","level":"error"}
+{"message":"Unauthorized request to path: /articles/911","level":"error"}
+{"message":"Bookmark with id of 1 created","level":"info"}
+{"message":"Title is required","level":"error"}
+{"message":"Url is required","level":"error"}
+{"message":"Rating is not between 1 and 5","level":"error"}
+{"message":"Url length is wrong","level":"error"}
+{"message":"Bookmark with id of 1 created","level":"info"}
+{"message":"Title is required","level":"error"}
+{"message":"Url is required","level":"error"}
+{"message":"Rating is not between 1 and 5","level":"error"}
+{"message":"Url length is wrong","level":"error"}
+{"message":"Bookmark with id of 1 created","level":"info"}
+{"message":"Title is required","level":"error"}
+{"message":"Url is required","level":"error"}
+{"message":"Rating is not between 1 and 5","level":"error"}
+{"message":"Url length is wrong","level":"error"}
+{"message":"Bookmark with id of 1 created","level":"info"}
+{"message":"Title is required","level":"error"}
+{"message":"Url is required","level":"error"}
+{"message":"Rating is not between 1 and 5","level":"error"}
+{"message":"Url length is wrong","level":"error"}
+{"message":"Bookmark with id of 1 created","level":"info"}

@@ -1,6 +1,9 @@
 const app = require('../src/app');
 const knex = require('knex');
-const { makeBookmarksArray } = require('./bookmarks.fixtures');
+const {
+  makeBookmarksArray,
+  makeMaliciousBookmark
+} = require('./bookmarks.fixtures');
 
 describe('app, bookmarks-router', () => {
   let db;
@@ -55,6 +58,27 @@ describe('app, bookmarks-router', () => {
           });
       });
     });
+
+    context(`Given an XSS attack article`, () => {
+      const { maliciousBookmark, expectedBookmark } = makeMaliciousBookmark();
+
+      beforeEach('insert malicious bookmark', () => {
+        return db.into('bookmarks').insert([maliciousBookmark]);
+      });
+
+      it('removes XSS attack content', () => {
+        return supertest(app)
+          .get('/bookmarks')
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(200)
+          .expect(res => {
+            expect(res.body[0].title).to.eql(expectedBookmark.title);
+            expect(res.body[0].site_description).to.eql(
+              expectedBookmark.site_description
+            );
+          });
+      });
+    });
   });
 
   describe('GET /bookmarks/:id', () => {
@@ -87,6 +111,27 @@ describe('app, bookmarks-router', () => {
           .get('/bookmarks/12345678')
           .set('Authorization', 'bearer ' + process.env.API_KEY)
           .expect(404);
+      });
+    });
+
+    context(`Given an XSS attack article`, () => {
+      const { maliciousBookmark, expectedBookmark } = makeMaliciousBookmark();
+
+      beforeEach('insert malicious bookmark', () => {
+        return db.into('bookmarks').insert([maliciousBookmark]);
+      });
+
+      it('removes CSS attack content', () => {
+        return supertest(app)
+          .get(`/bookmarks/${maliciousBookmark.id}`)
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(200)
+          .expect(res => {
+            expect(res.body.title).to.eql(expectedBookmark.title);
+            expect(res.body.site_description).to.eql(
+              expectedBookmark.site_description
+            );
+          });
       });
     });
   });
@@ -150,9 +195,24 @@ describe('app, bookmarks-router', () => {
         .send(invalidBookmark)
         .expect(400);
     });
+
+    it('removes XSS attack content from a response', () => {
+      const { maliciousBookmark, expectedBookmark } = makeMaliciousBookmark();
+      return supertest(app)
+        .post('/bookmarks')
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
+        .send(maliciousBookmark)
+        .expect(201)
+        .expect(res => {
+          expect(res.body.title).to.eql(expectedBookmark.title);
+          expect(res.body.site_description).to.eql(
+            expectedBookmark.site_description
+          );
+        });
+    });
   });
 
-  describe.only('DELETE /bookmarks/:id', () => {
+  describe('DELETE /bookmarks/:id', () => {
     context(`Given there are bookmarks in the database`, () => {
       const testBookmarks = makeBookmarksArray();
       beforeEach('insert bookmarks', () => {
