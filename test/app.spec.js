@@ -19,6 +19,16 @@ describe('app, bookmarks-router', () => {
 
   afterEach('clean up the table', () => db('bookmarks').truncate());
 
+  context(`given there are no bookmarks in the database`, () => {});
+
+  context(`given there are bookmarks in the database`, () => {
+    const testBookmarks = makeBookmarksArray();
+
+    beforeEach('insert bookmarks', () => {
+      return db.into('bookmarks').insert(testBookmarks);
+    });
+  });
+
   describe('GET /bookmarks', () => {
     it('should return a list of bookmarks', () => {
       return supertest(app)
