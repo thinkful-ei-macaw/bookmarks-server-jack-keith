@@ -12,3 +12,4 @@
 {"message":"Bookmark with id 8sdfbvbs65sd deleted","level":"info"}
 {"message":"Bookmark with id 6d6155e9-3225-40c2-a71d-40142963ec6d created","level":"info"}
 {"message":"Title is required","level":"error"}
+{"message":"Unauthorized request to path: /bookmarks","level":"error"}

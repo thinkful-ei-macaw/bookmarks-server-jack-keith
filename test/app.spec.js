@@ -19,34 +19,41 @@ describe('app, bookmarks-router', () => {
 
   afterEach('clean up the table', () => db('bookmarks').truncate());
 
-  context(`given there are no bookmarks in the database`, () => {});
+  context(`given there are no bookmarks in the database`, () => {
+    it(`responds with 200 and an empty list`, () => {
+      return supertest(app)
+        .get('/bookmarks')
+        .set('Authorization', 'bearer ' + process.env.API_KEY)
+        .expect(200, []);
+    });
+  });
 
-  context(`given there are bookmarks in the database`, () => {
+  context.only(`given there are bookmarks in the database`, () => {
     const testBookmarks = makeBookmarksArray();
 
     beforeEach('insert bookmarks', () => {
       return db.into('bookmarks').insert(testBookmarks);
     });
-  });
 
-  describe('GET /bookmarks', () => {
-    it('should return a list of bookmarks', () => {
-      return supertest(app)
-        .get('/bookmarks')
-        .set('Authorization', 'bearer ' + process.env.API_KEY)
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .then(res => {
-          expect(res.body).to.be.an('array');
-          expect(res.body[0]).to.be.an('object');
-          expect(res.body[0]).to.have.all.keys(
-            'id',
-            'title',
-            'url',
-            'desc',
-            'rating'
-          );
-        });
+    describe('GET /bookmarks', () => {
+      it('should return a list of bookmarks', () => {
+        return supertest(app)
+          .get('/bookmarks')
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .then(res => {
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.be.an('object');
+            expect(res.body[0]).to.have.all.keys(
+              'id',
+              'title',
+              'site_url',
+              'site_description',
+              'rating'
+            );
+          });
+      });
     });
   });
 
