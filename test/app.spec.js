@@ -91,12 +91,11 @@ describe('app, bookmarks-router', () => {
     });
   });
 
-  describe('POST /bookmarks', () => {
+  describe.only('POST /bookmarks', () => {
     const validBookmark = {
-      id: '867-5309-jenny-jenny',
       title: 'Google',
-      url: 'https://www.google.com/',
-      desc: 'The best search engine. Period.',
+      site_url: 'https://www.google.com/',
+      site_description: 'The best search engine. Period.',
       rating: 5
     };
 
@@ -105,10 +104,25 @@ describe('app, bookmarks-router', () => {
         .post('/bookmarks')
         .set('Authorization', 'bearer ' + process.env.API_KEY)
         .send(validBookmark)
-        .expect(201);
+        .expect(201)
+        .expect(res => {
+          expect(res.body.title).to.eql(validBookmark.title);
+          expect(res.body.site_url).to.eql(validBookmark.site_url);
+          expect(res.body.site_description).to.eql(
+            validBookmark.site_description
+          );
+          expect(res.body.rating).to.eql(validBookmark.rating);
+          expect(res.headers.location).to.eql(`bookmarks/${res.body.id}`);
+        })
+        .then(res =>
+          supertest(app)
+            .get(`/bookmarks/${res.body.id}`)
+            .set('Authorization', 'bearer ' + process.env.API_KEY)
+            .expect(res.body)
+        );
     });
 
-    ['title', 'url'].forEach(key => {
+    ['title', 'site_url'].forEach(key => {
       it(`should send back a 400 error if ${key} is not provided`, () => {
         const invalidBookmark = { ...validBookmark, [key]: '' };
         return supertest(app)
@@ -129,7 +143,7 @@ describe('app, bookmarks-router', () => {
     });
 
     it('should send back a 400 error is the url is less than 5 chars', () => {
-      const invalidBookmark = { ...validBookmark, url: 'http' };
+      const invalidBookmark = { ...validBookmark, site_url: 'http' };
       return supertest(app)
         .post('/bookmarks')
         .set('Authorization', 'bearer ' + process.env.API_KEY)

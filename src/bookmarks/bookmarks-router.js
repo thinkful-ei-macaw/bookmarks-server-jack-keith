@@ -1,6 +1,5 @@
 const express = require('express');
 const bookmarksData = require('../store/store');
-const uuid = require('uuid/v4');
 const logger = require('../logger');
 const BookmarksService = require('../bookmarks-service');
 
@@ -18,16 +17,17 @@ bookmarksRouter
       .catch(next);
   })
   .post(bodyParser, (req, res) => {
-    const { title, url, desc = '', rating = 1 } = req.body;
+    const { title, site_url, site_description = '', rating = 1 } = req.body;
+
     if (!title) {
       logger.error('Title is required');
       return res.status(400).send('Title is required');
     }
-    if (!url) {
+    if (!site_url) {
       logger.error('Url is required');
       return res.status(400).send('Url is required');
     }
-    if (url.length < 5) {
+    if (site_url.length < 5) {
       logger.error('Url length is wrong');
       return res.status(400).send('Url length must be 5 or greater');
     }
@@ -42,21 +42,19 @@ bookmarksRouter
         .send('Rating cannot be less than 1 or greater than 5');
     }
 
-    const id = uuid();
-    const bookmark = {
-      id,
+    const newBookmark = {
       title,
-      url,
-      desc,
+      site_url,
+      site_description,
       rating
     };
 
-    bookmarksData.push(bookmark);
-    logger.info(`Bookmark with id ${id} created`);
-    res
-      .status(201)
-      .location(`http://localhost:8000/bookmarks/${id}`)
-      .json(bookmark);
+    BookmarksService.insertBookmark(req.app.get('db'), newBookmark).then(
+      bookmark => {
+        logger.info(`Bookmark with id of ${bookmark.id} created`);
+        res.status(201).location(`bookmarks/${bookmark.id}`).json(bookmark);
+      }
+    );
   });
 
 bookmarksRouter
