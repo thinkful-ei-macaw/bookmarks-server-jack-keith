@@ -91,7 +91,7 @@ describe('app, bookmarks-router', () => {
     });
   });
 
-  describe.only('POST /bookmarks', () => {
+  describe('POST /bookmarks', () => {
     const validBookmark = {
       title: 'Google',
       site_url: 'https://www.google.com/',
@@ -152,21 +152,30 @@ describe('app, bookmarks-router', () => {
     });
   });
 
-  describe('DELETE /bookmarks/:id', () => {
-    it('deletes a bookmark when provided a valid id', () => {
-      const bookmarkId = '8sdfbvbs65sd';
-      return supertest(app)
-        .delete(`/bookmarks/${bookmarkId}`)
-        .set('Authorization', 'bearer ' + process.env.API_KEY)
-        .expect(204);
+  describe.only('DELETE /bookmarks/:id', () => {
+    context(`Given there are bookmarks in the database`, () => {
+      const testBookmarks = makeBookmarksArray();
+      beforeEach('insert bookmarks', () => {
+        return db.into('bookmarks').insert(testBookmarks);
+      });
+
+      it('deletes a bookmark when provided a valid id', () => {
+        const bookmarkId = 2;
+        return supertest(app)
+          .delete(`/bookmarks/${bookmarkId}`)
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(204);
+      });
     });
 
-    it('sends back a 404 error when bookmark with id cannot be found', () => {
-      const invalidId = 'INVALID-ID';
-      return supertest(app)
-        .delete(`/bookmarks/${invalidId}`)
-        .set('Authorization', 'bearer ' + process.env.API_KEY)
-        .expect(404);
+    context(`Given there are no bookmarks in the database`, () => {
+      it('sends back a 404 error when bookmark with id cannot be found', () => {
+        const invalidId = 123456;
+        return supertest(app)
+          .delete(`/bookmarks/${invalidId}`)
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(404);
+      });
     });
   });
 });
