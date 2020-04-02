@@ -1,6 +1,24 @@
 const app = require('../src/app');
+const knex = require('knex');
+const { makeBookmarksArray } = require('./bookmarks.fixtures');
 
-describe('App', () => {
+describe('app, bookmarks-router', () => {
+  let db;
+
+  before('make a knex instance', () => {
+    db = knex({
+      client: 'pg',
+      connection: process.env.TEST_DB_URL
+    });
+    app.set('db', db);
+  });
+
+  after('disconnect from db', () => db.destroy());
+
+  before('clean the table', () => db('bookmarks').truncate());
+
+  afterEach('clean up the table', () => db('bookmarks').truncate());
+
   describe('GET /bookmarks', () => {
     it('should return a list of bookmarks', () => {
       return supertest(app)
