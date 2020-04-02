@@ -55,32 +55,32 @@ describe('app, bookmarks-router', () => {
           });
       });
     });
-  });
 
-  describe('GET /bookmarks/:id', () => {
-    it('should return a specific bookmark with id', () => {
-      const bookmarkId = '8sdfbvbs65sd';
-      return supertest(app)
-        .get(`/bookmarks/${bookmarkId}`)
-        .set('Authorization', 'bearer ' + process.env.API_KEY)
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .then(res => {
-          expect(res.body).to.be.an('object');
-          expect(res.body).to.have.all.keys(
-            'id',
-            'title',
-            'url',
-            'desc',
-            'rating'
-          );
-        });
-    });
-    it('should return an error if id is invalid', () => {
-      return supertest(app)
-        .get('/bookmarks/INVALID')
-        .set('Authorization', 'bearer ' + process.env.API_KEY)
-        .expect(404);
+    describe('GET /bookmarks/:id', () => {
+      it('should return a specific bookmark with id', () => {
+        const bookmarkId = 1;
+        return supertest(app)
+          .get(`/bookmarks/${bookmarkId}`)
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .then(res => {
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.all.keys(
+              'id',
+              'title',
+              'site_url',
+              'site_description',
+              'rating'
+            );
+          });
+      });
+      it('should return an error if id is invalid', () => {
+        return supertest(app)
+          .get('/bookmarks/12345678')
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(404);
+      });
     });
   });
 
