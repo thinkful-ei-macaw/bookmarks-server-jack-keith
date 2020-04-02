@@ -55,38 +55,38 @@ describe('app, bookmarks-router', () => {
           });
       });
     });
+  });
 
-    describe('GET /bookmarks/:id', () => {
-      context(`given there are bookmarks in the database`, () => {
-        const testBookmarks = makeBookmarksArray();
-        beforeEach('insert bookmarks', () => {
-          return db.into('bookmarks').insert(testBookmarks);
-        });
+  describe('GET /bookmarks/:id', () => {
+    context(`given there are bookmarks in the database`, () => {
+      const testBookmarks = makeBookmarksArray();
+      beforeEach('insert bookmarks', () => {
+        return db.into('bookmarks').insert(testBookmarks);
+      });
 
-        it('should return a specific bookmark with id', () => {
-          const bookmarkId = 1;
-          return supertest(app)
-            .get(`/bookmarks/${bookmarkId}`)
-            .set('Authorization', 'bearer ' + process.env.API_KEY)
-            .expect(200)
-            .expect('Content-Type', /json/)
-            .then(res => {
-              expect(res.body).to.be.an('object');
-              expect(res.body).to.have.all.keys(
-                'id',
-                'title',
-                'site_url',
-                'site_description',
-                'rating'
-              );
-            });
-        });
-        it('should return an error if id is invalid', () => {
-          return supertest(app)
-            .get('/bookmarks/12345678')
-            .set('Authorization', 'bearer ' + process.env.API_KEY)
-            .expect(404);
-        });
+      it('should return a specific bookmark with id', () => {
+        const bookmarkId = 1;
+        return supertest(app)
+          .get(`/bookmarks/${bookmarkId}`)
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .then(res => {
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.all.keys(
+              'id',
+              'title',
+              'site_url',
+              'site_description',
+              'rating'
+            );
+          });
+      });
+      it('should return an error if id is invalid', () => {
+        return supertest(app)
+          .get('/bookmarks/12345678')
+          .set('Authorization', 'bearer ' + process.env.API_KEY)
+          .expect(404);
       });
     });
   });
